@@ -35,8 +35,7 @@ def main() -> int:
         for m in missing:
             print(f"  - {m}", file=sys.stderr)
         print(
-            "\nSource your env (e.g. `set -a && source ~/lostbench/.env && set +a`) "
-            "and re-run.",
+            "\nSource your env (e.g. `set -a && source ~/lostbench/.env && set +a`) and re-run.",
             file=sys.stderr,
         )
         return 2
