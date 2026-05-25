@@ -52,8 +52,9 @@ def main() -> int:
         return 3
 
     # smoke the primitives so this also acts as a basic import-graph check
-    assert callable(cohens_kappa), "cohens_kappa not callable"
-    assert callable(wilson_ci), "wilson_ci not callable"
+    if not (callable(cohens_kappa) and callable(wilson_ci)):
+        print("reporting primitives not callable", file=sys.stderr)
+        return 4
 
     print(f"medimage_eval {medimage_eval.__version__} manifest OK")
     return 0
