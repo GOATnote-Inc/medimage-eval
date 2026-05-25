@@ -60,6 +60,7 @@ ignore = ["S101"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["S", "E501"]
+"src/medimage_eval/judges/clinical_prompts.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
