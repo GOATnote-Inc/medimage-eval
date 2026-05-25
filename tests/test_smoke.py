@@ -19,10 +19,12 @@ def test_kappa_perfect_agreement():
     assert cohens_kappa([1, 0, 1, 1, 0], [1, 0, 1, 1, 0]) == pytest.approx(1.0)
 
 
-def test_kappa_no_correlation_above_chance_is_zero():
-    # Worked example from Fleiss (1971): when observed equals expected, κ == 0.
-    rater_a = [0] * 5 + [1] * 5
-    rater_b = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+def test_kappa_when_observed_equals_expected_is_zero():
+    # Independence construction: each rater splits 50/50, and the contingency
+    # table factors as the outer product of the marginals (every cell = 5).
+    # observed = (5+5)/20 = 0.5, expected = 0.5*0.5 + 0.5*0.5 = 0.5, so κ = 0.
+    rater_a = [0] * 10 + [1] * 10
+    rater_b = [0] * 5 + [1] * 5 + [0] * 5 + [1] * 5
     assert cohens_kappa(rater_a, rater_b) == pytest.approx(0.0, abs=1e-9)
 
 

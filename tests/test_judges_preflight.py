@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import sys
 
-import pytest
-
 
 def _reload_preflight():
     """Reload the preflight module so it re-reads os.environ."""
