@@ -1,12 +1,13 @@
 """Dual-judge clinical-accuracy runner with Cohen's kappa and Wilson CI.
 
-This is the core moat: every free-text clinical output the substrate evaluates
-goes through TWO independent judges. Per-item agreement is computed; per-batch
-Cohen's kappa is computed; the runner can REJECT a batch's reward signal when
-inter-judge kappa falls below a configured floor.
+Every free-text clinical output the substrate evaluates goes through TWO
+independent judges. Per-item agreement is computed; per-batch Cohen's kappa
+is computed; the runner can REJECT a batch's reward signal when inter-judge
+kappa falls below a configured floor.
 
-The reward-signal rejection is non-optional. The healthcraft V9 lesson —
-judge hallucination is the binding ceiling — is what this guards against.
+The reward-signal rejection is non-optional: single-judge scoring is bounded
+by judge hallucination, and disagreement between independent judges is the
+cheapest available detector for it.
 """
 
 from __future__ import annotations

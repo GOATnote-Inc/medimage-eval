@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "medimage-eval"
 version = "0.1.0.dev0"
-description = "Audit-grade evaluation substrate for open-source medical imaging models"
+description = "Evaluation substrate for open-source medical imaging models (pre-v0.1: dual-judge core only)"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
@@ -28,8 +28,8 @@ dependencies = [
 
 [project.optional-dependencies]
 judges = [
-  "anthropic>=0.40",
-  "openai>=1.50",
+  "anthropic>=1.0",
+  "openai>=2",
 ]
 dev = [
   "pytest>=7.4",

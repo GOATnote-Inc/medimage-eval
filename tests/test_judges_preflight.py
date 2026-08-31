@@ -96,6 +96,37 @@ def test_preflight_skips_canary_for_provider_without_key(monkeypatch, capsys):
     assert "SKIP" in out and "openai" in out
 
 
+def test_preflight_strict_fails_when_no_canary_attempted(monkeypatch, capsys):
+    """Strict mode refuses to pass when zero canaries could be attempted."""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-fake")
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-fake")
+    rc = run_preflight(strict=True, canary=True, canaries={})
+    captured = capsys.readouterr()
+    assert rc == 3
+    assert "no canary was attempted" in captured.err
+
+
+def test_main_is_strict_by_default(monkeypatch, capsys):
+    """`python -m medimage_eval.judges.preflight` with no keys must exit non-zero."""
+    from medimage_eval.judges.preflight import main
+
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setattr(sys, "argv", ["preflight", "--no-canary"])
+    rc = main()
+    assert rc == 3
+
+
+def test_main_allow_missing_relaxes_strictness(monkeypatch, capsys):
+    from medimage_eval.judges.preflight import main
+
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setattr(sys, "argv", ["preflight", "--no-canary", "--allow-missing"])
+    rc = main()
+    assert rc == 0
+
+
 # ---- _is_auth_error detection ------------------------------------------------
 
 

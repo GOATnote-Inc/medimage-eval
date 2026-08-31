@@ -3,15 +3,20 @@
 Silent 401s from a judge provider during a multi-hour run poison every reward
 signal: every trajectory comes back labelled 0, the resume cannot detect it,
 and the entire run is wasted. This preflight makes a tiny canary request
-against each configured provider before any long run starts. Loss of canary
-fail-fast is non-negotiable per `feedback_eval_preflight_judge_key.md`.
+against each configured provider before any long run starts. The canary
+fail-fast is non-negotiable: a run that starts with a bad judge key produces
+a uniformly-zero reward signal that looks like a model failure.
 
 Run via `make preflight` or `python -m medimage_eval.judges.preflight`.
+
+Strict is the default: missing keys, failed canaries, or zero canaries
+attempted all exit non-zero. Pass `--allow-missing` for local development
+without keys.
 
 Exit codes:
     0  All keys present and canaries passed (or `--no-canary`).
     2  At least one canary returned an authentication error.
-    3  At least one judge key is missing AND `--strict` was passed.
+    3  A judge key is missing or no canary could be attempted (strict mode).
 """
 
 from __future__ import annotations
@@ -133,10 +138,11 @@ def run_preflight(
     canaries: dict[str, Callable[[], CanaryResult]] | None = None,
 ) -> int:
     """Run the preflight checklist. Returns an exit code."""
-    canaries = canaries or {
-        "anthropic": check_anthropic_canary,
-        "openai": check_openai_canary,
-    }
+    if canaries is None:
+        canaries = {
+            "anthropic": check_anthropic_canary,
+            "openai": check_openai_canary,
+        }
 
     missing: list[str] = []
     for var, label in REQUIRED_ENV_VARS:
@@ -153,7 +159,7 @@ def run_preflight(
         for m in missing:
             print(f"  - {m}", file=sys.stderr)
         print(
-            "\nSource your env (e.g. `set -a && source ~/lostbench/.env && set +a`) and re-run.",
+            "\nExport ANTHROPIC_API_KEY / OPENAI_API_KEY (e.g. from a local dotenv) and re-run.",
             file=sys.stderr,
         )
         if strict:
@@ -187,6 +193,13 @@ def run_preflight(
         return 2
 
     if not any_canary_attempted:
+        if strict:
+            print(
+                "\nPreflight FAILED: no canary was attempted (no keys present). "
+                "Pass --allow-missing to permit this for local development.",
+                file=sys.stderr,
+            )
+            return 3
         print("\nNo canary attempted (no keys present). Preflight OK with caveat.")
     else:
         print("\nPreflight OK: judge keys verified by canary.")
@@ -202,10 +215,12 @@ def main() -> int:
         help="skip the real canary request to each provider (env-var check only)",
     )
     parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="exit non-zero when any required key is missing (default: warn only)",
+        "--allow-missing",
+        dest="strict",
+        action="store_false",
+        help="do not fail on missing keys / skipped canaries (local development only)",
     )
+    parser.set_defaults(strict=True)
     args = parser.parse_args()
     return run_preflight(strict=args.strict, canary=args.canary)
 

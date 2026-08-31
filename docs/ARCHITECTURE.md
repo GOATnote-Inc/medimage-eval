@@ -1,6 +1,6 @@
 # Architecture
 
-`medimage-eval` is the evaluation substrate that the GOATnote medical imaging stack uses for every model release. The substrate is consumed by two model repos under a stable Python API: `medimage-model` (commercial-OK) and `medimage-model-research` (NC-constrained).
+`medimage-eval` is the evaluation substrate intended for every GOATnote medical imaging model release. Only the dual-judge layer and the stats primitives exist today; the panels and the attestation layer are planned (see README and STATUS.md). The substrate is consumed by two model repos under a stable Python API: `medimage-model` (commercial-OK) and `medimage-model-research` (NC-constrained).
 
 ## Layers
 
@@ -22,7 +22,7 @@
 The judge runner contract and the stats primitives are stable surfaces. Internal layouts of benchmark adapters can change between minor versions.
 
 ## Why a separate repo
-The substrate is the GOATnote moat: model results are only as trustworthy as the eval rig that produced them. Extracting the substrate as its own package gives:
+Model results are only as trustworthy as the eval rig that produced them. Extracting the substrate as its own package gives:
 
 1. **Cross-model reuse** — same substrate runs the commercial and research models.
 2. **Community adoption** — `pip install medimage-eval` is consumable by any open-source medical imaging project. Adopting one shared substrate is how the community gets comparable model cards.

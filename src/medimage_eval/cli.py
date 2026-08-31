@@ -10,7 +10,7 @@ import medimage_eval
 @click.group()
 @click.version_option(medimage_eval.__version__, prog_name="medimage-eval")
 def main() -> None:
-    """medimage-eval — audit-grade evaluation substrate."""
+    """medimage-eval — evaluation substrate for medical imaging AI."""
 
 
 @main.command()
