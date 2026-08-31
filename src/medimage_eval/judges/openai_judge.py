@@ -3,8 +3,8 @@
 Notes:
 
 * GPT-5.4 requires ``max_completion_tokens``, not the legacy ``max_tokens``.
-  Sending ``max_tokens`` is silently ignored / rejected depending on the model
-  (see scribegoat2 incident memory). We use the correct name.
+  Sending ``max_tokens`` is silently ignored / rejected depending on the model.
+  We use the correct name.
 * Structured outputs via ``response_format`` with a JSON schema.
 * OpenAI applies prompt caching automatically for prefixes ≥ 1024 tokens.
   No explicit annotation is needed; the only thing under our control is

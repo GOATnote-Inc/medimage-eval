@@ -1,15 +1,15 @@
 # CLAUDE.md — medimage-eval operating charter
 
 ## Mission
-Audit-grade evaluation substrate for open-source medical imaging models. The eval rig is the moat. Models come and go; the substrate is what makes results trustworthy.
+Evaluation substrate for open-source medical imaging models. Models come and go; the substrate is what makes results trustworthy.
 
 ## Non-negotiables
 
-1. **No `.env` reads.** Source from `/Users/kiteboard/lostbench/.env` for judge API keys. Verify keys via length-only checks (`awk -F= '/^KEY=/ {print $1, "len:", length($2)}'`).
-2. **Judge pre-flight before any multi-hour run.** Silent 401s poison reward signals — `feedback_eval_preflight_judge_key.md` lesson is canonical.
+1. **No `.env` reads.** Judge API keys come from the environment (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`). Verify keys via length-only checks (`awk -F= '/^KEY=/ {print $1, "len:", length($2)}'`); never print values.
+2. **Judge pre-flight before any multi-hour run.** Silent 401s poison reward signals: every trajectory scores 0 and the run is wasted.
 3. **No `git add -A`.** Stage by name. Evaluation outputs are artifact-class data; treat as immutable.
 4. **Pre-commit `exclude` pattern protects `eval_outputs/`, `judge_traces/`, `golden_master/runs/`.**
-5. **Reject reward signals when judges disagree beyond κ threshold.** Lesson from healthcraft V9: judge hallucination is the binding ceiling.
+5. **Reject reward signals when judges disagree beyond κ threshold.** Judge hallucination is the binding ceiling on judge-scored evals.
 6. **Deterministic eval runs.** Manifest hash + judge model version + code commit + random seed all logged into the receipt for every run.
 
 ## Continuation contract

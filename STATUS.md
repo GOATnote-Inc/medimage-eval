@@ -30,4 +30,8 @@ make lint && make test
 - Branch protection on this repo is **NOT** yet enabled (follow-up: add the four-context baseline once shift_gauntlet ships)
 
 ## Last updated
-2026-05-26 — end of scaffolding + live-judges session (PRs #1, #2 merged)
+2026-08-31 — readiness fixes: README rewritten into Implemented vs Planned, judge
+preflight strict by default (missing keys / zero canaries = non-zero exit,
+`--allow-missing` for local dev), internal-environment references scrubbed, full
+Apache-2.0 text + NOTICE, SDK floors raised (anthropic>=1.0, openai>=2).
+Previous: 2026-05-26 — end of scaffolding + live-judges session (PRs #1, #2 merged)
