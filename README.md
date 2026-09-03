@@ -2,6 +2,9 @@
 
 **An open evaluation substrate for medical imaging AI.**
 
+
+> **Maintenance status (2026-09):** passive. This repository is kept available as a reference implementation; CI runs on pushes and pull requests only, Dependabot security alerts remain enabled, and no scheduled jobs or hosted services consume ongoing resources. No active development is planned.
+
 `medimage-eval` aims to be a shared evaluation layer for medical imaging models: standard benchmarks, cross-site generalization, dual-judge clinical accuracy, physician adjudication, and receipted eval runs under one contract.
 
 > Status: pre-v0.1 scaffold. The dual-judge core is implemented and hermetically tested; most of the surface described below is planned, not built. See STATUS.md for the precise, dated state.
